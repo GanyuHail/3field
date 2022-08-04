@@ -2,7 +2,6 @@
     'use strict';
 
     var scene, camera, renderer;
-
     var container, HEIGHT,
         WIDTH, fieldOfView, aspectRatio,
         nearPlane, farPlane, stats,
@@ -19,25 +18,20 @@
     animate();
 
     function init() {
-
         HEIGHT = window.innerHeight;
         WIDTH = window.innerWidth;
         windowHalfX = WIDTH / 2;
         windowHalfY = HEIGHT / 2;
-
         fieldOfView = 75;
         aspectRatio = WIDTH / HEIGHT;
         nearPlane = 1;
         farPlane = 3000;
-
-
         cameraZ = farPlane / 3; 
         fogHex = 0x000000; /* As black as your heart.	*/
         fogDensity = 0.0007; /* So not terribly dense?	*/
 
         camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
         camera.position.z = cameraZ;
-
         scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(fogHex, fogDensity);
 
@@ -47,12 +41,10 @@
         document.body.style.overflow = 'hidden';
 
         geometry = new THREE.Geometry(); 
-
-        particleCount = 20000; /* Leagues under the sea */
+        particleCount = 20000; 
 
 
         for (i = 0; i < particleCount; i++) {
-
             var vertex = new THREE.Vector3();
             vertex.x = Math.random() * 2000 - 1000;
             vertex.y = Math.random() * 2000 - 1000;
@@ -84,13 +76,11 @@
 
             color = parameters[i][0];
             size = parameters[i][1];
-
             materials[i] = new THREE.PointCloudMaterial({
                 size: size
             });
 
             particles = new THREE.PointCloud(geometry, materials[i]);
-
             particles.rotation.x = Math.random() * 6;
             particles.rotation.y = Math.random() * 6;
             particles.rotation.z = Math.random() * 6;
@@ -101,21 +91,17 @@
         renderer = new THREE.WebGLRenderer();
         renderer.setPixelRatio(window.devicePixelRatio); 
         renderer.setSize(WIDTH, HEIGHT); 
-
         container.appendChild(renderer.domElement); 
-
         stats = new Stats();
         stats.domElement.style.position = 'absolute';
         stats.domElement.style.top = '0px';
         stats.domElement.style.right = '0px';
         container.appendChild(stats.domElement);
 
-
         window.addEventListener('resize', onWindowResize, false);
         document.addEventListener('mousemove', onDocumentMouseMove, false);
         document.addEventListener('touchstart', onDocumentTouchStart, false);
         document.addEventListener('touchmove', onDocumentTouchMove, false);
-
     }
 
     function animate() {
@@ -126,26 +112,19 @@
 
     function render() {
         var time = Date.now() * 0.00005;
-
         camera.position.x += (mouseX - camera.position.x) * 0.05;
         camera.position.y += (-mouseY - camera.position.y) * 0.05;
-
         camera.lookAt(scene.position);
 
         for (i = 0; i < scene.children.length; i++) {
-
             var object = scene.children[i];
-
             if (object instanceof THREE.PointCloud) {
-
                 object.rotation.y = time * (i < 4 ? i + 1 : -(i + 1));
             }
         }
 
         for (i = 0; i < materials.length; i++) {
-
             color = parameters[i][0];
-
             h = (360 * (color[0] + time) % 360) / 360;
             materials[i].color.setHSL(h, color[1], color[2]);
         }
@@ -161,7 +140,6 @@
     function onDocumentTouchStart(e) {
 
         if (e.touches.length === 1) {
-
             e.preventDefault();
             mouseX = e.touches[0].pageX - windowHalfX;
             mouseY = e.touches[0].pageY - windowHalfY;
@@ -171,7 +149,6 @@
     function onDocumentTouchMove(e) {
 
         if (e.touches.length === 1) {
-
             e.preventDefault();
             mouseX = e.touches[0].pageX - windowHalfX;
             mouseY = e.touches[0].pageY - windowHalfY;
@@ -179,10 +156,8 @@
     }
 
     function onWindowResize() {
-
         windowHalfX = window.innerWidth / 2;
         windowHalfY = window.innerHeight / 2;
-
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
